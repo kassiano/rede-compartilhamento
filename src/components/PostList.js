@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import UrlPreview from './UrlPreview'
 
 class PostList extends Component{
 
@@ -12,9 +12,19 @@ class PostList extends Component{
       case 'video':
           return (
             <video width="320" height="240" controls>
-              <source src="./videos/video_teste.mp4" type="video/mp4"/>
+              <source src={`./videos/${post.content}`} type="video/mp4"/>
             </video>
           )
+      case 'code':
+            return(
+              <code>
+                {post.content}
+              </code>
+            )
+      case 'link':
+            return(
+              <UrlPreview url={post.content} />
+            )
       default:
         return <p>{post.content}</p>
     }
