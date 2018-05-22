@@ -8,7 +8,14 @@ class PostList extends Component{
 
     switch (post.type) {
       case 'img':
-          return <img src="./images/pica_pau.jpg" height="100" width="100" />
+          return (
+            <div>
+              <div>
+                {post.content}
+              </div>
+              <img className="img-size" src={post.image} alt=""/>
+            </div>
+          )
       case 'video':
           return (
             <video width="320" height="240" controls>
@@ -17,16 +24,22 @@ class PostList extends Component{
           )
       case 'code':
             return(
-              <code>
-                {post.content}
-              </code>
+                <pre>
+                  <code>
+                      {post.content}
+                  </code>
+               </pre>
             )
       case 'link':
             return(
               <UrlPreview url={post.content} />
             )
       default:
-        return <p>{post.content}</p>
+        return (
+            <pre>
+                {post.content}
+            </pre>
+        )
     }
 
   }
@@ -39,11 +52,20 @@ class PostList extends Component{
 
         posts.map(p=> (
 
-          <div key={p.id}>
-
-            {this.renderPost(p)}
-
+          <div className="card-post row" key={p.id}>
+              <h4></h4>
+              <div className="lead">
+                  {this.renderPost(p)}
+              </div>
+              <small>
+                  <hr/>
+                  Postado em:
+                  {p.postDate.getDate() + '/'+  (p.postDate.getMonth() + 1) + '/' +p.postDate.getFullYear()  }
+              </small>
           </div>
+
+
+
         ))
 
     )

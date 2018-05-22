@@ -41,7 +41,7 @@ class UrlPreview extends Component{
 
       <div>
         <div>
-          <img src={image} height="100" width="150" />
+          <img alt="" src={image} height="100" width="150" />
         </div>
         <div>
           <p> {title}</p>
@@ -54,7 +54,7 @@ class UrlPreview extends Component{
       </div>
 
     )
-    
+
   }
 }
 
