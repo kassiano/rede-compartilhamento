@@ -7,7 +7,8 @@ class PublishBlock extends Component{
     content : '',
     contentType: 'text',
     image : null,
-    classHidden: 'hidden'
+    classHidden: 'hidden',
+    btnPublish:''
   }
 
   updateContent = (text)=>{
@@ -17,12 +18,6 @@ class PublishBlock extends Component{
   updateContentType = (target)=>{
 
     let value = target.value
-
-    let btns = [ this.btn_code,this.btn_img, this.btn_video, this.btn_link, this.btn_text  ]
-
-    btns.filter(btn=> btn !== target ).map(btn=> btn.className = "btn")
-
-    target.className = "btn btn-success"
 
     let classHidden = 'hidden'
     if(value === 'img' || value == 'video'){
@@ -51,7 +46,7 @@ class PublishBlock extends Component{
       image : null
     })
 
-    this.file_img.value = null
+    //this.file_img.value = null
 
   }
 
@@ -71,74 +66,28 @@ class PublishBlock extends Component{
 
 
   render(){
-
-    const { content } = this.state
-
+    const { content } = this.state;
+    const enabled = content.length > 0 ;
 
     return(
 
-      <div className="row">
-        <div className="col-md-6">
+      <li className="rv b agz">
+        <div className="input-group">
+          <textarea type="text" className="form-control" placeholder="Message"
+            value={this.state.content}
+            onChange={(event)=>{this.updateContent(event.target.value)}}
+            />
+          <div className="bpt">
 
+            <button type="button" className="btn btn-outline-success my-2 my-sm-0" onClick={(event) => this.onAddPost(event)}
+              disabled={!enabled}>
+              Publicar
+            </button>
 
-            <div className="form-group">
-              <div className="col-sm-8">
-                <textarea className="form-control" rows="2"
-                  name="status" id="status"
-                  placeholder="Anything special to share?"
-                  value={content}
-                  onChange={(event) => this.updateContent(event.target.value)} />
-
-                  <div className={this.state.classHidden}>
-                   <input type="file"
-                     onChange={this.onImageChange.bind(this)}
-                     ref={(ob) => this.file_img = ob }
-                     className="filetype" id="group_image"/>
-                   </div>
-
-                <br/>
-                  <button className="btn"
-                      onClick={(event) => this.updateContentType(event.target)}
-                      ref={(el) => this.btn_code = el }
-                      value="code">Código</button>
-                    &nbsp;
-                  <button className="btn"
-                          onClick={(event) => this.updateContentType(event.target)}
-                          ref={(el) => this.btn_img = el }
-                          value="img">Imagem</button>
-                  &nbsp;
-                  <button className="btn"
-                          onClick={(event) => this.updateContentType(event.target)}
-                          ref={(el) => this.btn_video = el }
-                          value="video">Vídeo</button>
-                  &nbsp;
-                <button className="btn"
-                          onClick={(event) => this.updateContentType(event.target)}
-                          ref={(el) => this.btn_link = el }
-                          value="link">Link</button>
-                        &nbsp;
-                <button className="btn btn-success"
-                            onClick={(event) => this.updateContentType(event.target)}
-                            ref={(el) => this.btn_text = el }
-                            value="text">Texto</button>
-                          &nbsp;
-                 <br/><br/>
-
-              </div>
-
-              <div className="col-sm-4">
-                <button type="submit"
-                  className="btn btn-success btn-block btn-lg"
-                  onClick={ (event) => this.onAddPost(event) }
-                  >Post</button>
-              </div>
-            </div>
-
+          </div>
         </div>
-        <div className="col-md-6">
 
-        </div>
-      </div>
+      </li>
 
     )
 

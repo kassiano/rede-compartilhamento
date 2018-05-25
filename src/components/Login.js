@@ -12,12 +12,11 @@ class Login extends Component{
 
   }
 
-
   render(){
 
     return(
 
-      <div className="padding-10">
+      <div className="padding-10 jumbotron">
             <form className="form-horizontal"
               onSubmit={this.handleSubmit} >
 
@@ -42,7 +41,7 @@ class Login extends Component{
                 </div>
 
                 <div className="form-group ">
-                    <input type="submit" className="btn btn-success btn-lg btn-block login-button" value="Log In" />
+                    <input type="submit" className="btn btn-outline-success my-2 my-sm-0" value="Log In" />
                 </div>
 
             </form>

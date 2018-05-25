@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import UrlPreview from './UrlPreview'
+import { Card, CardTitle } from 'react-materialize'
+import PublishBlock from './PublishBlock'
 
 class PostList extends Component{
 
@@ -48,25 +50,60 @@ class PostList extends Component{
   render(){
     const { posts } = this.props
 
+    const pad = (number, length)=> {
+        var str = '' + number;
+        while (str.length < length) {
+            str = '0' + str;
+        }
+        return str;
+    }
+
+    console.log(posts)
+
     return(
 
-        posts.map(p=> (
 
-          <div className="card-post row" key={p.id}>
-              <h4></h4>
-              <div className="lead">
-                  {this.renderPost(p)}
+      <div className="fm">
+
+        <ul className="ca bow box afo">
+
+        <PublishBlock onAddPost={this.props.onAddPost}/>
+
+        { posts.reverse().map(p=> (
+
+
+            <li className="rv b agz" key={p.id}>
+            <img className="bos vb yb aff" src={p.author.profileImage} />
+            <div className="rw">
+              <div className="bpd">
+                <div className="bpb">
+                  <small className="acx axc">
+                    {`${p.postDate.getDate()}/${pad(p.postDate.getMonth(),2)} `}
+                  </small>
+                  <h6>{p.author.name}</h6>
+                </div>
+                <pre>
+
+                  {p.content}
+
+                </pre>
               </div>
-              <small>
-                  <hr/>
-                  Postado em:
-                  {p.postDate.getDate() + '/'+  (p.postDate.getMonth() + 1) + '/' +p.postDate.getFullYear()  }
-              </small>
-          </div>
-
-
+              <button className="cg nz ok" style={{
+                  margin: '10px'
+                }}>
+                Gostei disso</button>
+                <button className="cg nz ok">
+                  Comentar</button>
+            </div>
+          </li>
 
         ))
+      }
+
+        </ul>
+
+      </div>
+
 
     )
 

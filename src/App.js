@@ -4,26 +4,60 @@ import PostList from './components/PostList'
 import PublishBlock from './components/PublishBlock'
 import Login from './components/Login'
 import crypto from 'crypto'
-import { Route } from 'react-router-dom'
+import { Route , Redirect } from 'react-router-dom'
+import Register from './components/Register'
+import ProfileBox from './components/ProfileBox'
+import NavBar from './components/NavBar'
+import * as UsersAPI from './utils/UsersAPI'
+import FriendsList from './components/FriendsList'
+
 
 class App extends Component {
 
   state  = {
       postsList: [],
-      users: [{
-        name : 'Kassiano',
-        email :'kassiano.resende@gmail.com',
-        passwd : 'A6xnQhbz4Vx2HuGl4lXwZ5U2I8iziLRFnhP5eNfIRvQ='
-      }],
+      users: null,
       loggedUser: null
   }
 
+  componentDidMount() {
+      let users  =  UsersAPI.getAll()
 
-  onLogin = (user)=>{
+      this.setState({
+        users,
+        loggedUser:users[1]
+       })
+  }
 
-    var hash = crypto.createHash('sha256').update(user.passwd).digest('base64');
+
+  onRegister = (user) => {
+
+    let hash = crypto.createHash('sha256').update(user.passwd).digest('base64');
+
+    user.passwd = hash
+
+    this.setState(state => ({
+      users: state.users.concat([ user ])
+    }))
+
+    alert('Usuario cadastrado com sucesso.')
+
+    console.log(user);
+
+    return true
+
+  }
+
+  onLogin = (user)=> {
+
+    if(!user.passwd){
+      return false
+    }
+
+    let hash = crypto.createHash('sha256').update(user.passwd).digest('base64');
 
     let userLogin = this.state.users.filter(u => u.email === user.email && u.passwd === hash )
+
 
     if(userLogin.length > 0){
 
@@ -31,12 +65,18 @@ class App extends Component {
         loggedUser : userLogin[0]
       })
 
-    }else{
+      return true
 
+    }else{
+      alert('Falha na autenticação. Usuário ou senha incorretos.')
+      /*
       this.setState({
         loggedUser : null
       })
+      */
+      return false
     }
+
 
   }
 
@@ -48,10 +88,19 @@ class App extends Component {
     } , 0) + 1
 
     post.id = idPost
+    post.author = this.state.loggedUser
+    post.likes = 0
 
     this.setState(state => ({
       postsList: state.postsList.concat([ post ])
     }))
+
+  }
+
+
+  onLikePost = (post) =>{
+
+    
 
   }
 
@@ -62,55 +111,92 @@ class App extends Component {
   //  var hash = crypto.createHash('sha256').update('1234').digest('base64');
 
 
-
     return (
-      <div className="App container">
-        <div className="row main">
+      <div className="App">
 
-          <nav className="navbar navbar-default">
-             <div className="container-fluid">
-                 <div className="navbar-header">
-                     <a className="navbar-brand" href="#">Rede compartilhamento</a>
-                 </div>
-                 <ul className="nav navbar-nav">
-                     <li><a href="#">Home</a></li>
-                     <li><a href="#">Login</a></li>
-                     <li><a href="#">Register</a></li>
-                 </ul>
-             </div>
-         </nav>
+        <main className="main bg-dark">
 
+          <NavBar />
 
-         <Route exact path='/home' render={() => (
-           <div>
-              <PublishBlock onAddPost={this.addPost} />
-              <PostList posts={this.state.postsList} />
-           </div>
+           <div className="by aha ahl">
+
+         <Route exact path='/register' render={({ history }) => (
+           <Register
+               onRegister={(user) => {
+
+               this.onRegister(user) && (
+                  history.push('/login')
+               )
+
+             }}
+              />
+
          )}/>
 
-       <Route exact path='/' render={({ history }) => (
+
+         <Route path='/home' render={() => (
+
+
+             this.state.loggedUser !== null ? (
+
+                 <div className="dp">
+
+                   <ProfileBox
+                     loggedUser={this.state.loggedUser}
+                     frindCount={this.state.users.length -1}
+                     />
+
+                   <PostList
+                     posts={this.state.postsList}
+                     onAddPost={this.addPost}
+                     />
+
+                   <FriendsList
+                     friends={this.state.users.filter(f=> f !== this.state.loggedUser )}
+                     />
+                 </div>
+
+             ) : (
+
+               <Redirect to="/login"/>
+
+             )
+
+         )}/>
+
+
+       <Route path='/login' render={({ history }) => (
+         <Login
+             onLogin={(user) => {
+             let loginOk = this.onLogin(user)
+             if(loginOk){
+               history.push('/home')
+             }
+
+           }}
+            />
+         )}/>
+
+       <Route exact path='/' render={() => (
 
           this.state.loggedUser !== null ? (
 
-            <div>
-               <PublishBlock onAddPost={this.addPost} />
-               <PostList posts={this.state.postsList} />
-            </div>
+            <Redirect to="/home"/>
 
           ) : (
-            <Login
-                onLogin={(user) => {
-                this.onLogin(user)
-                history.push('/home')
-              }}
-               />
+
+            <Redirect to="/login"/>
 
           )
 
-
          )}/>
 
-        </div>
+
+       </div>
+
+
+    </main>
+
 
 
       </div>
