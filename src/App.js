@@ -24,8 +24,7 @@ class App extends Component {
       let users  =  UsersAPI.getAll()
 
       this.setState({
-        users,
-        loggedUser:users[1]
+        users
        })
   }
 
@@ -100,7 +99,7 @@ class App extends Component {
 
   onLikePost = (post) =>{
 
-    
+
 
   }
 
