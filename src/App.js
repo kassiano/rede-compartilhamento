@@ -17,7 +17,13 @@ class App extends Component {
   state  = {
       postsList: [],
       users: null,
-      loggedUser: null
+      loggedUser: {
+        name : 'Honey',
+        email :'honey@gmail.com',
+        passwd : 'A6xnQhbz4Vx2HuGl4lXwZ5U2I8iziLRFnhP5eNfIRvQ=',
+        description: 'oiess, sou a honey .',
+        profileImage: './images/honey.png'
+      }
   }
 
   componentDidMount() {
@@ -40,8 +46,6 @@ class App extends Component {
     }))
 
     alert('Usuario cadastrado com sucesso.')
-
-    console.log(user);
 
     return true
 
@@ -99,16 +103,19 @@ class App extends Component {
 
   onLikePost = (post) =>{
 
+    let qtdLikes = post.likes + 1
 
+    this.setState(state => ({
+      postsList: this.state.postsList.map(p=>
+        p.id === post.id ? { ...p, likes : qtdLikes } : p
+      )
+    }))
 
   }
 
 
 
   render() {
-
-  //  var hash = crypto.createHash('sha256').update('1234').digest('base64');
-
 
     return (
       <div className="App">
@@ -142,16 +149,21 @@ class App extends Component {
 
                    <ProfileBox
                      loggedUser={this.state.loggedUser}
-                     frindCount={this.state.users.length -1}
+                     frindCount={ this.state.users ? this.state.users.length -1 : 0}
                      />
 
                    <PostList
                      posts={this.state.postsList}
                      onAddPost={this.addPost}
+                     onLikePost={this.onLikePost}
                      />
 
                    <FriendsList
-                     friends={this.state.users.filter(f=> f !== this.state.loggedUser )}
+                     friends={
+                        this.state.users ?
+                        this.state.users.filter(f=> f !== this.state.loggedUser )
+                        :[]
+                      }
                      />
                  </div>
 

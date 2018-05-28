@@ -6,44 +6,15 @@ import PublishBlock from './PublishBlock'
 class PostList extends Component{
 
 
-  renderPost = (post) =>{
+  renderPost = (text) =>{
 
-    switch (post.type) {
-      case 'img':
-          return (
-            <div>
-              <div>
-                {post.content}
-              </div>
-              <img className="img-size" src={post.image} alt=""/>
-            </div>
-          )
-      case 'video':
-          return (
-            <video width="320" height="240" controls>
-              <source src={`./videos/${post.content}`} type="video/mp4"/>
-            </video>
-          )
-      case 'code':
-            return(
-                <pre>
-                  <code>
-                      {post.content}
-                  </code>
-               </pre>
-            )
-      case 'link':
-            return(
-              <UrlPreview url={post.content} />
-            )
-      default:
-        return (
-            <pre>
-                {post.content}
-            </pre>
-        )
-    }
+      return text.replace(/@([a-z\d_]+)/ig, '<a href="#$1">@$1</a>');
 
+  }
+
+
+  onLikePost = (post)=>{
+    this.props.onLikePost(post)
   }
 
 
@@ -58,7 +29,7 @@ class PostList extends Component{
         return str;
     }
 
-    console.log(posts)
+
 
     return(
 
@@ -69,8 +40,7 @@ class PostList extends Component{
 
         <PublishBlock onAddPost={this.props.onAddPost}/>
 
-        { posts.reverse().map(p=> (
-
+        { posts.sort(function(a,b){return b.postDate - a.postDate}).map(p=> (
 
             <li className="rv b agz" key={p.id}>
             <img className="bos vb yb aff" src={p.author.profileImage} />
@@ -84,15 +54,21 @@ class PostList extends Component{
                 </div>
                 <pre>
 
-                  {p.content}
+                  { p.content }
 
                 </pre>
               </div>
-              <button className="cg nz ok" style={{
+              <span>{p.likes}</span><i className="fa fa-heart" style={{width:'20px'}}></i>
+              <button className="cg nz ok"
+                onClick={(event)=>{
+                        this.onLikePost(p)
+                    }
+                  }
+                 style={{
                   margin: '10px'
                 }}>
                 Gostei disso</button>
-                <button className="cg nz ok">
+              <button className="cg nz ok">
                   Comentar</button>
             </div>
           </li>
