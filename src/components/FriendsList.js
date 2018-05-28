@@ -40,7 +40,7 @@ class FrindsList extends Component{
       <div className="pz bpm">
         <div className="qa">
           © 2018 Kassiano Resende
-          <a target="_blank" href="https://github.com/kassiano">Github</a>
+          <a target="_blank" href="https://github.com/kassiano/rede-compartilhamento">Github</a>
           <br/>
           Aplicativo desenvolvido em ReactJS para o curso de Informática para internet
           oferecido pelo SENAI SC e Unindustria
