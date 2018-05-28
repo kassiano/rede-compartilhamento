@@ -39,20 +39,11 @@ class FrindsList extends Component{
 
       <div className="pz bpm">
         <div className="qa">
-          © 2018 Bootstrap
-          <a href="#">Github</a>
-          <a href="#">Help</a>
-          <a href="#">Terms</a>
-          <a href="#">Privacy</a>
-          <a href="#">Cookies</a>
-          <a href="#">Ads </a>
-          <a href="#">Info</a>
-          <a href="#">Brand</a>
-          <a href="#">Blog</a>
-          <a href="#">Status</a>
-          <a href="#">Apps</a>
-          <a href="#">Jobs</a>
-          <a href="#">Advertise</a>
+          © 2018 Kassiano Resende
+          <a target="_blank" href="https://github.com/kassiano">Github</a>
+          <br/>
+          Aplicativo desenvolvido em ReactJS para o curso de Informática para internet
+          oferecido pelo SENAI SC e Unindustria
         </div>
       </div>
     </div>

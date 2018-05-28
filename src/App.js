@@ -17,13 +17,14 @@ class App extends Component {
   state  = {
       postsList: [],
       users: null,
-      loggedUser: {
+      loggedUser: null
+      /* {
         name : 'Honey',
         email :'honey@gmail.com',
         passwd : 'A6xnQhbz4Vx2HuGl4lXwZ5U2I8iziLRFnhP5eNfIRvQ=',
         description: 'oiess, sou a honey .',
         profileImage: './images/honey.png'
-      }
+      }*/
   }
 
   componentDidMount() {
@@ -106,13 +107,34 @@ class App extends Component {
     let qtdLikes = post.likes + 1
 
     this.setState(state => ({
-      postsList: this.state.postsList.map(p=>
+      postsList: state.postsList.map(p=>
         p.id === post.id ? { ...p, likes : qtdLikes } : p
       )
     }))
 
   }
 
+  onLogOut = () =>{
+
+    this.setState({
+      loggedUser: null
+    })
+
+  }
+
+  onDeleteAccount = () => {
+    let deletar  = window.confirm("Tem certeza que deseja deletar sua conta?")
+
+    if(deletar){
+      let user = this.state.loggedUser
+
+      this.setState((state) => ({
+        users : state.users.filter(u=> u.email !== user.email)
+        ,loggedUser: null
+      }))
+    }
+
+  }
 
 
   render() {
@@ -150,6 +172,8 @@ class App extends Component {
                    <ProfileBox
                      loggedUser={this.state.loggedUser}
                      frindCount={ this.state.users ? this.state.users.length -1 : 0}
+                     onLogOut={this.onLogOut}
+                     onDeleteAccount={this.onDeleteAccount}
                      />
 
                    <PostList
