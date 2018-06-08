@@ -48,7 +48,7 @@ class PostList extends Component{
               <div className="bpd">
                 <div className="bpb">
                   <small className="acx axc">
-                    {`${p.postDate.getDate()}/${pad(p.postDate.getMonth(),2)} `}
+                    { /*`${p.postDate.getDate()}/${pad(p.postDate.getMonth(),2)} `*/}
                   </small>
                   <h6>{p.author.name}</h6>
                 </div>

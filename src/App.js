@@ -9,6 +9,7 @@ import Register from './components/Register'
 import ProfileBox from './components/ProfileBox'
 import NavBar from './components/NavBar'
 import * as UsersAPI from './utils/UsersAPI'
+import * as PostsAPI from './utils/PostsAPI'
 import FriendsList from './components/FriendsList'
 
 
@@ -28,11 +29,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-      let users  =  UsersAPI.getAll()
 
-      this.setState({
-        users
-       })
+    UsersAPI.getAll().then((users) => {
+
+      console.log(users)
+      this.setState({ users })
+    })
+
   }
 
 
@@ -42,17 +45,20 @@ class App extends Component {
 
     user.passwd = hash
 
-    this.setState(state => ({
-      users: state.users.concat([ user ])
-    }))
+    UsersAPI.create(user).then(() => {
+      this.setState(state => ({
+        users: state.users.concat([ user ])
+      }))
 
-    alert('Usuario cadastrado com sucesso.')
+      alert('Usuario cadastrado com sucesso.')
+
+    })
 
     return true
 
   }
 
-  onLogin = (user)=> {
+  onLogin = (user, callback)=> {
 
     if(!user.passwd){
       return false
@@ -65,11 +71,16 @@ class App extends Component {
 
     if(userLogin.length > 0){
 
-      this.setState({
-        loggedUser : userLogin[0]
-      })
+      PostsAPI.getAll().then((posts) => {
 
-      return true
+        this.setState({
+          loggedUser : userLogin[0],
+          postsList: posts
+        })
+
+      callback()
+
+      })
 
     }else{
       alert('Falha na autenticação. Usuário ou senha incorretos.')
@@ -78,7 +89,7 @@ class App extends Component {
         loggedUser : null
       })
       */
-      return false
+      
     }
 
 
@@ -95,9 +106,16 @@ class App extends Component {
     post.author = this.state.loggedUser
     post.likes = 0
 
-    this.setState(state => ({
-      postsList: state.postsList.concat([ post ])
-    }))
+
+    PostsAPI.create(post).then(() => {
+
+      this.setState(state => ({
+          postsList: state.postsList.concat([ post ])
+      }))
+
+
+    })
+
 
   }
 
@@ -203,10 +221,8 @@ class App extends Component {
        <Route path='/login' render={({ history }) => (
          <Login
              onLogin={(user) => {
-             let loginOk = this.onLogin(user)
-             if(loginOk){
-               history.push('/home')
-             }
+             this.onLogin(user, () =>  history.push('/home'))
+
 
            }}
             />
