@@ -89,7 +89,7 @@ class App extends Component {
         loggedUser : null
       })
       */
-      
+
     }
 
 
@@ -124,11 +124,16 @@ class App extends Component {
 
     let qtdLikes = post.likes + 1
 
-    this.setState(state => ({
-      postsList: state.postsList.map(p=>
-        p.id === post.id ? { ...p, likes : qtdLikes } : p
-      )
-    }))
+
+    PostsAPI.like(post).then(()=>{
+
+      this.setState(state => ({
+        postsList: state.postsList.map(p=>
+          p.id === post.id ? { ...p, likes : qtdLikes } : p
+        )
+      }))
+
+    })
 
   }
 
@@ -146,10 +151,19 @@ class App extends Component {
     if(deletar){
       let user = this.state.loggedUser
 
-      this.setState((state) => ({
-        users : state.users.filter(u=> u.email !== user.email)
-        ,loggedUser: null
-      }))
+      UsersAPI.remove({
+        email: user.email,
+        passwd: user.passwd
+      }).then(()=>{
+
+        this.setState((state) => ({
+          users : state.users.filter(u=> u.email !== user.email)
+          ,loggedUser: null
+        }))
+
+      })
+
+
     }
 
   }

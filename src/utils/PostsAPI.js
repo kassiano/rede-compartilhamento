@@ -21,3 +21,15 @@ export const create = (body) =>
     },
     body: JSON.stringify(body)
   }).then(res => res.json())
+
+
+  export const like = (body) =>
+    fetch(`${api}/like`, {
+      method: 'POST',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    }).then(res => res.json())
+    
